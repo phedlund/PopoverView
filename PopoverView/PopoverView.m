@@ -18,6 +18,7 @@
 @synthesize contentView;
 @synthesize titleView;
 @synthesize delegate;
+@synthesize backgroundGradientColors;
 
 #pragma mark - Static Methods
 
@@ -110,6 +111,7 @@
         // Initialization code
         
         self.backgroundColor = [UIColor clearColor];
+        self.backgroundGradientColors = [NSArray arrayWithObjects:kGradientTopColor, kGradientBottomColor, nil];
         
         self.titleView = nil;
         self.contentView = nil;
@@ -844,6 +846,26 @@
     [self layoutAtPoint:point inView:view];
 }
 
+#pragma mark - Properties
+
+- (NSArray *)backgroundGradientColors
+{
+	return backgroundGradientColors;
+}
+
+- (void)setBackgroundGradientColors:(NSArray *)array
+{
+	if (array && [array count] != 2) {
+		NSLog(@"PopoverView WARNING: backgroundGradientColors must contain 2 colors");
+	}
+	else if (array != backgroundGradientColors) {
+		[backgroundGradientColors RELEASE];
+		backgroundGradientColors = [array RETAIN];
+        
+		[self setNeedsDisplay];
+		}
+}
+
 #pragma mark - Drawing Routines
 
 // Only override drawRect: if you perform custom drawing.
@@ -924,8 +946,8 @@
     
     //// Gradient Declarations
     NSArray* gradientColors = [NSArray arrayWithObjects:
-                               (id)kGradientTopColor.CGColor,
-                               (id)kGradientBottomColor.CGColor, nil];
+                               (id)(UIColor*)[[self.backgroundGradientColors objectAtIndex:0] CGColor],
+                               (id)(UIColor*)[[self.backgroundGradientColors objectAtIndex:1] CGColor], nil];
     CGFloat gradientLocations[] = {0, 1};
     CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFTYPECAST(CFArrayRef)gradientColors), gradientLocations);
     

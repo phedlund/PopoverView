@@ -108,6 +108,8 @@
 
 @property (nonatomic, WEAK) id<PopoverViewDelegate> delegate;
 
+@property (nonatomic, STRONG) NSArray *backgroundGradientColors;
+
 #pragma mark - Class Static Showing Methods
 
 //These are the main static methods you can use to display the popover.
